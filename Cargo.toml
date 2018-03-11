@@ -1,0 +1,6 @@
+[package]
+name = "rbrainfuck"
+version = "0.1.0"
+authors = ["Shinichi Morimoto <shnmorimoto@gmail.com>"]
+
+[dependencies]
