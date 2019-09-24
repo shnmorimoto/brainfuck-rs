@@ -1,1 +1,1 @@
-# rbrainfuck
+# brainfuck-rs
