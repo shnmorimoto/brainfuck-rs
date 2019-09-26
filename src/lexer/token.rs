@@ -1,32 +1,5 @@
+use crate::common::{Annot, Loc};
 use std::fmt;
-
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-struct Loc(usize, usize);
-
-impl Loc {
-    fn merge(&self, other: &Loc) -> Loc {
-        use std::cmp::{max, min};
-        Loc(min(self.0, other.0), max(self.1, other.1))
-    }
-}
-
-impl fmt::Display for Loc {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}-{}", self.0, self.1)
-    }
-}
-
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-struct Annot<T> {
-    value: T,
-    loc: Loc,
-}
-
-impl<T> Annot<T> {
-    fn new(value: T, loc: Loc) -> Self {
-        Self {value, loc}
-    }
-}
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 enum TokenKind {
@@ -36,15 +9,16 @@ enum TokenKind {
     Prev,
     Read,
     Write,
-    Open,
-    Close,
+    LParen,
+    RParen,
 }
 
 impl fmt::Display for TokenKind {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         use self::TokenKind::*;
         match self {
-            Incr => write!(f, ">")
+            Incr => write!(f, ">"),
+    
             Decr => write!(f, "<"),
             Next => write!(f, "+"),
             Prev => write!(f, "-"),
