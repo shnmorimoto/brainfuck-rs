@@ -11,11 +11,11 @@ pub enum LexErrorKind {
 pub type LexError = Annot<LexErrorKind>;
 
 impl LexError {
-    fn invalid_char(c: char, loc: Loc) -> Self {
+    pub fn invalid_char(c: char, loc: Loc) -> Self {
         Self::new(LexErrorKind::InvalidChar(c), loc)
     }
 
-    fn eof(loc: Loc) -> Self {
+    pub fn eof(loc: Loc) -> Self {
         Self::new(LexErrorKind::Eof, loc)
     }
 }
