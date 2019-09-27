@@ -1,7 +1,7 @@
 use std::fmt;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub struct Loc(usize, usize);
+pub(crate) struct Loc(usize, usize);
 
 impl Loc {
     fn merge(&self, other: &Loc) -> Loc {

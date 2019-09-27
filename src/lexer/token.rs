@@ -2,7 +2,7 @@ use crate::common::{Annot, Loc};
 use std::fmt;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-enum TokenKind {
+pub enum TokenKind {
     Incr,
     Decr,
     Next,
