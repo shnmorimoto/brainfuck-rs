@@ -21,9 +21,12 @@ impl fmt::Display for ParseError {
                 tok.loc, tok.value
             ),
             UnclosedOpenParen(tok) => write!(f, "{}: '{}' is not closed", tok.loc, tok.value),
-            RedudantExpression(tok) => write!(f, "{}: expression after '{}' is redundant", tok.loc, tok.value),
+            RedudantExpression(tok) => write!(
+                f,
+                "{}: expression after '{}' is redundant",
+                tok.loc, tok.value
+            ),
             Eof => write!(f, "End of file"),
-
         }
     }
 }
