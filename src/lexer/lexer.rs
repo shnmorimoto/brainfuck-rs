@@ -3,7 +3,6 @@ use super::token::Token;
 use crate::common::Loc;
 
 pub fn lex(input: &str) -> Result<Vec<Token>, LexError> {
-
     let mut tokens = Vec::new();
     let input = input.as_bytes();
     let mut pos = 0;
@@ -25,11 +24,11 @@ pub fn lex(input: &str) -> Result<Vec<Token>, LexError> {
             b',' => lex_a_token!(lex_read(input, pos)),
             b'.' => lex_a_token!(lex_write(input, pos)),
             b'[' => lex_a_token!(lex_lparen(input, pos)),
-            b']' => lex_a_token!(lex_rparen(input, pos)),            
+            b']' => lex_a_token!(lex_rparen(input, pos)),
             b' ' | b'\n' | b'\t' => {
                 let ((), p) = skip_spaces(input, pos)?;
                 pos = p;
-            },
+            }
             b => return Err(LexError::invalid_char(b as char, Loc(pos, pos + 1))),
         }
     }
@@ -51,35 +50,35 @@ fn consume_byte(input: &[u8], pos: usize, b: u8) -> Result<(u8, usize), LexError
     Ok((b, pos + 1))
 }
 
-fn lex_incr(input :&[u8], start: usize) -> Result<(Token, usize), LexError> {
+fn lex_incr(input: &[u8], start: usize) -> Result<(Token, usize), LexError> {
     consume_byte(input, start, b'+').map(|(_, end)| (Token::incr(Loc(start, end)), end))
 }
 
-fn lex_decr(input :&[u8], start: usize) -> Result<(Token, usize), LexError> {
+fn lex_decr(input: &[u8], start: usize) -> Result<(Token, usize), LexError> {
     consume_byte(input, start, b'-').map(|(_, end)| (Token::decr(Loc(start, end)), end))
 }
 
-fn lex_next(input :&[u8], start: usize) -> Result<(Token, usize), LexError> {
+fn lex_next(input: &[u8], start: usize) -> Result<(Token, usize), LexError> {
     consume_byte(input, start, b'>').map(|(_, end)| (Token::next(Loc(start, end)), end))
 }
 
-fn lex_prev(input :&[u8], start: usize) -> Result<(Token, usize), LexError> {
+fn lex_prev(input: &[u8], start: usize) -> Result<(Token, usize), LexError> {
     consume_byte(input, start, b'<').map(|(_, end)| (Token::prev(Loc(start, end)), end))
 }
 
-fn lex_read(input :&[u8], start: usize) -> Result<(Token, usize), LexError> {
+fn lex_read(input: &[u8], start: usize) -> Result<(Token, usize), LexError> {
     consume_byte(input, start, b',').map(|(_, end)| (Token::read(Loc(start, end)), end))
 }
 
-fn lex_write(input :&[u8], start: usize) -> Result<(Token, usize), LexError> {
+fn lex_write(input: &[u8], start: usize) -> Result<(Token, usize), LexError> {
     consume_byte(input, start, b'.').map(|(_, end)| (Token::write(Loc(start, end)), end))
 }
 
-fn lex_lparen(input :&[u8], start: usize) -> Result<(Token, usize), LexError> {
+fn lex_lparen(input: &[u8], start: usize) -> Result<(Token, usize), LexError> {
     consume_byte(input, start, b'[').map(|(_, end)| (Token::lparen(Loc(start, end)), end))
 }
 
-fn lex_rparen(input :&[u8], start: usize) -> Result<(Token, usize), LexError> {
+fn lex_rparen(input: &[u8], start: usize) -> Result<(Token, usize), LexError> {
     consume_byte(input, start, b']').map(|(_, end)| (Token::rparen(Loc(start, end)), end))
 }
 

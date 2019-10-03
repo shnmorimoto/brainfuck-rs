@@ -9,7 +9,7 @@ pub enum AstKind {
     Prev,
     Read,
     Write,
-    Loop(Vec<Ast>)
+    Loop(Vec<Ast>),
 }
 
 pub type Ast = Annot<AstKind>;

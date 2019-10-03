@@ -1,6 +1,6 @@
-use crate::lexer::token::Token;
-use super::error::ParseError;
 use super::ast::*;
+use super::error::ParseError;
+use crate::lexer::token::Token;
 use crate::lexer::token::TokenKind;
 use std::iter::Peekable;
 
@@ -47,4 +47,4 @@ where
             }
             _ => Err(ParseError::NotExpression(tok)),
         })
-}   
+}
