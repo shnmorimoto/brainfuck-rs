@@ -13,11 +13,39 @@ pub fn parse(tokens: Vec<Token>) -> Result<Ast, ParseError> {
     }
 }
 
-fn parse_expr<Tokens>(tokens: &mut Peekable<Tokens>) -> Result<Ast, ParseError>
+fn parse_expr<Tokens>(tokens: &mut Peekable<Tokens>) -> Result<Vec<Ast>, ParseError>
 where
     Tokens: Iterator<Item = Token>,
 {
-    parse_atom(tokens)
+    let mut instruction_stack:Vec<Ast> = Vec::new();
+    loop {
+        let token = tokens
+            .next()
+            .and_then(|tok| match tok.value {
+                TokenKind::Incr => Ok(Ast::incr(tok.loc)),
+                TokenKind::Decr => Ok(Ast::decr(tok.loc)),
+                TokenKind::Next => Ok(Ast::next(tok.loc)),
+                TokenKind::Prev => Ok(Ast::prev(tok.loc)),
+                TokenKind::Read => Ok(Ast::read(tok.loc)),
+                TokenKind::Write => Ok(Ast::write(tok.loc)),
+                TokenKind::LParen => {
+                    let asts = parse_expr(tokens)?;
+                    let ast = tokens.next()
+                        .ok_or(ParseError::Eof)
+                        .and_then { |tok| match tok.value 
+                            {
+                                Some(Token {
+                                    value: TokenKind::RParen,
+                                    ..
+                                }) => Ok(Ast::ast_loop(asts)),
+                                Some(t) => Err(ParseError::RedudantExpression(t)),
+                                _ => Err(ParseError::UnclosedOpenParen(tok)),
+                            }
+                        }
+                },
+            }
+        }    
+    }
 }
 
 fn parse_atom<Tokens>(tokens: &mut Peekable<Tokens>) -> Result<Ast, ParseError>
