@@ -4,7 +4,7 @@ use crate::lexer::token::Token;
 use crate::lexer::token::TokenKind;
 use std::iter::Peekable;
 
-pub fn parse(tokens: Vec<Token>) -> Result<Ast, ParseError> {
+pub fn parse(tokens: Vec<Token>) -> Result<Vec<Ast>, ParseError> {
     let mut tokens = tokens.into_iter().peekable();
     let ret = parse_expr(&mut tokens)?;
     match tokens.next() {
@@ -19,8 +19,9 @@ where
 {
     let mut instruction_stack:Vec<Ast> = Vec::new();
     loop {
-        let token = tokens
+        let ast = tokens
             .next()
+            .ok_or(ParseError::Eof)
             .and_then(|tok| match tok.value {
                 TokenKind::Incr => Ok(Ast::incr(tok.loc)),
                 TokenKind::Decr => Ok(Ast::decr(tok.loc)),
@@ -28,51 +29,13 @@ where
                 TokenKind::Prev => Ok(Ast::prev(tok.loc)),
                 TokenKind::Read => Ok(Ast::read(tok.loc)),
                 TokenKind::Write => Ok(Ast::write(tok.loc)),
-                TokenKind::LParen => {
-                    let asts = parse_expr(tokens)?;
-                    let ast = tokens.next()
-                        .ok_or(ParseError::Eof)
-                        .and_then { |tok| match tok.value 
-                            {
-                                Some(Token {
-                                    value: TokenKind::RParen,
-                                    ..
-                                }) => Ok(Ast::ast_loop(asts)),
-                                Some(t) => Err(ParseError::RedudantExpression(t)),
-                                _ => Err(ParseError::UnclosedOpenParen(tok)),
-                            }
-                        }
-                },
-            }
-        }    
-    }
-}
+            });
 
-fn parse_atom<Tokens>(tokens: &mut Peekable<Tokens>) -> Result<Ast, ParseError>
-where
-    Tokens: Iterator<Item = Token>,
-{
-    tokens
-        .next()
-        .ok_or(ParseError::Eof)
-        .and_then(|tok| match tok.value {
-            TokenKind::Incr => Ok(Ast::incr(tok.loc)),
-            TokenKind::Decr => Ok(Ast::decr(tok.loc)),
-            TokenKind::Next => Ok(Ast::next(tok.loc)),
-            TokenKind::Prev => Ok(Ast::prev(tok.loc)),
-            TokenKind::Read => Ok(Ast::read(tok.loc)),
-            TokenKind::Write => Ok(Ast::write(tok.loc)),
-            TokenKind::LParen => {
-                let e = parse_expr(tokens)?;
-                match tokens.next() {
-                    Some(Token {
-                        value: TokenKind::RParen,
-                        ..
-                    }) => Ok(e),
-                    Some(t) => Err(ParseError::RedudantExpression(t)),
-                    _ => Err(ParseError::UnclosedOpenParen(tok)),
-                }
-            }
-            _ => Err(ParseError::NotExpression(tok)),
-        })
+        match ast {
+            Err(ParseError::Eof) => break,
+            _ => (),
+        }
+        instruction_stack.push(ast?);
+    }
+    Ok(instruction_stack)
 }
