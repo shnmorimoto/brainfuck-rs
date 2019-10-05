@@ -17,7 +17,7 @@ fn parse_expr<Tokens>(tokens: &mut Peekable<Tokens>) -> Result<Vec<Ast>, ParseEr
 where
     Tokens: Iterator<Item = Token>,
 {
-    let mut instruction_stack:Vec<Ast> = Vec::new();
+    let mut instruction_stack: Vec<Ast> = Vec::new();
     loop {
         let ast = tokens
             .next()
@@ -29,6 +29,11 @@ where
                 TokenKind::Prev => Ok(Ast::prev(tok.loc)),
                 TokenKind::Read => Ok(Ast::read(tok.loc)),
                 TokenKind::Write => Ok(Ast::write(tok.loc)),
+                TokenKind::LParen => {
+                    let loop_asts = parse_expr(tokens)?;
+                    Ok(Ast::ast_loop(loop_asts, tok.loc))
+                }
+                TokenKind::RParen => Err(ParseError::Eof),
             });
 
         match ast {
