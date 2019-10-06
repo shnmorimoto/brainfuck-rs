@@ -1,3 +1,4 @@
+use crate::common::Loc;
 use crate::lexer::token::Token;
 use std::fmt;
 
@@ -5,7 +6,8 @@ use std::fmt;
 pub enum ParseError {
     UnexpectedToken(Token),
     NotExpression(Token),
-    UnclosedOpenParen(Token),
+    UnclosedOpenParen(Loc),
+    RedudantClosedParen(Token),
     RedudantExpression(Token),
     Eof,
 }
@@ -20,7 +22,10 @@ impl fmt::Display for ParseError {
                 "{}: '{}' is not a start of expression",
                 tok.loc, tok.value
             ),
-            UnclosedOpenParen(tok) => write!(f, "{}: '{}' is not closed", tok.loc, tok.value),
+            UnclosedOpenParen(position) => write!(f, "{}: Paren is not closed", position),
+            RedudantClosedParen(tok) => {
+                write!(f, "{}: '{}' is redudant closed", tok.loc, tok.value)
+            }
             RedudantExpression(tok) => write!(
                 f,
                 "{}: expression after '{}' is redundant",
