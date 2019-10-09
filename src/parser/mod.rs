@@ -1,3 +1,3 @@
-mod ast;
 mod error;
-mod parser;
+pub mod ast;
+pub mod parser;
