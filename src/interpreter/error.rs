@@ -1,8 +1,8 @@
 use crate::common::Annot;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-enum InterpreterErrorKind {
+pub enum InterpreterErrorKind {
     TapeBufferOverflow,
 }
 
-type InterpreterError = Annot<InterpreterErrorKind>;
+pub type InterpreterError = Annot<InterpreterErrorKind>;
