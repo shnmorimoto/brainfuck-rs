@@ -1,5 +1,6 @@
 use crate::parser::ast::Ast;
 use crate::parser::ast::AstKind;
+use error::InterpreterError;
 
 mod error;
 
