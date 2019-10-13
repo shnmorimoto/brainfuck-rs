@@ -5,6 +5,7 @@ use crate::common::Loc;
 pub enum InterpreterErrorKind {
     TapeBufferOverflow,
     NegativePosition,
+    CannotDecodeCharacter,
 }
 
 pub type InterpreterError = Annot<InterpreterErrorKind>;
@@ -15,5 +16,8 @@ impl InterpreterError {
     }
     pub fn negative_postion(loc: Loc) -> Self {
         Self::new(InterpreterErrorKind::NegativePosition, loc)
+    }
+    pub fn cannot_decode_character(loc: Loc) -> Self {
+        Self::new(InterpreterErrorKind::CannotDecodeCharacter, loc)
     }
 }
