@@ -5,7 +5,7 @@ use std::io;
 
 mod error;
 
-struct Interpreter {
+pub struct Interpreter {
     position: usize,
     tape: Vec<u32>,
     size: usize,
