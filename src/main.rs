@@ -4,7 +4,7 @@ use brainfuck_rs::lexer::lexer::lex;
 
 fn main() {
     let mut interp = Interpreter::new(3000);
-    let code: &str = "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++.+.+.>++++++++++."; //ABC
+    let code: &str = "+++++++++[>++++++++>+++++++++++>+++>+<<<<-]>.>++.+++++++..+++.>+++++.<<+++++++++++++++.>.+++.------.--------.>+.>+."; //hello world
     let tokens = match lex(code) {
         Ok(tokens) => tokens,
         Err(_) => return (),
