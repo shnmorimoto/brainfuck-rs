@@ -36,7 +36,7 @@ impl Interpreter {
                         }
                     }
                     AstKind::Prev => {
-                        if *_position - 1 < 0 {
+                        if *_position == 0 {
                             return Err(InterpreterError::negative_postion(ast.loc))
                         } else {
                             *_position -= 1
@@ -60,7 +60,7 @@ impl Interpreter {
                         };
                     }
                     AstKind::Loop(inner_ast) => {
-                        while _tape[*_position] == 0 {
+                        while _tape[*_position] != 0 {
                             _eval(_position, _tape, _size, &inner_ast)?
                         }
                     }
