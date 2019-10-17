@@ -12,7 +12,7 @@ pub enum Error {
 }
 
 impl Error {
-    fn show_diagnostic(&self, input: &str) {
+    pub fn show_diagnostic(&self, input: &str) {
         use self::Error::*;
         use self::ParseError as P;
         let (e, loc): (&dyn StdError, Loc) = match self {
@@ -53,4 +53,13 @@ impl StdError for Error {
 fn print_annot(input: &str, loc: Loc) {
     eprintln!("{}", input);
     eprintln!("{}{}", " ".repeat(loc.0), "^".repeat(loc.1 - loc.0));
+}
+
+pub fn show_trace<E: StdError>(e: E) {
+    eprintln!("{}", e);
+    let mut source = e.source();
+    while let Some(e) = source {
+        eprintln!("caused by {}", e);
+        source = e.source()
+    }
 }
