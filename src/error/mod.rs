@@ -2,7 +2,9 @@ use std::error::Error as StdError;
 use crate::lexer::error::LexError;
 use crate::parser::error::ParseError;
 use crate::common::Loc;
+use crate::common::print_annot;
 use crate::lexer::token::Token;
+
 use std::fmt;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -48,11 +50,6 @@ impl StdError for Error {
             Parser(parse) => Some(parse),
         }
     }
-}
-
-fn print_annot(input: &str, loc: Loc) {
-    eprintln!("{}", input);
-    eprintln!("{}{}", " ".repeat(loc.0), "^".repeat(loc.1 - loc.0));
 }
 
 pub fn show_trace<E: StdError>(e: E) {
