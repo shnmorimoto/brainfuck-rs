@@ -51,7 +51,10 @@ impl Interpreter {
                     }
                     AstKind::Read => {
                         let mut buf_in = String::new();
-                        io::stdin().read_line(&mut buf_in);
+                        match io::stdin().read_line(&mut buf_in) {
+                            Ok(_) => (),
+                            Err(_) => return Err(InterpreterError::cannot_read_character(ast.loc))
+                        };
                         _tape[*_position] = match buf_in.trim().parse::<u32>() {
                             Ok(num) => num,
                             Err(_) => {
