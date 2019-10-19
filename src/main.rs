@@ -19,7 +19,12 @@ fn main() {
 
     match interp.eval(asts) {
         Ok(_) => return (),
-        Err(_) => return (),
+        Err(e) => {
+            e.show_diagnostic(&code);
+            show_trace(e);
+            return();
+
+        }
     }
 }
 

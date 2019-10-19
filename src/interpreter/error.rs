@@ -48,7 +48,7 @@ impl StdError for InterpreterError {
 }
 
 impl InterpreterError {
-    fn show_diagnostic(&self, input: &str) {
+    pub fn show_diagnostic(&self, input: &str) {
         // エラー情報を簡単に表示し
         eprintln!("{}", self);
         // エラー位置を指示する
