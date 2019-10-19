@@ -9,6 +9,7 @@ pub enum InterpreterErrorKind {
     TapeBufferOverflow,
     NegativePosition,
     CannotDecodeCharacter,
+    CannotReadCharacter,
 }
 
 pub type InterpreterError = Annot<InterpreterErrorKind>;
@@ -23,6 +24,9 @@ impl InterpreterError {
     pub fn cannot_decode_character(loc: Loc) -> Self {
         Self::new(InterpreterErrorKind::CannotDecodeCharacter, loc)
     }
+    pub fn cannot_read_character(loc: Loc) -> Self {
+        Self::new(InterpreterErrorKind::CannotReadCharacter, loc)
+    }
 }
 
 impl fmt::Display for InterpreterError {
@@ -32,6 +36,7 @@ impl fmt::Display for InterpreterError {
             TapeBufferOverflow => write!(f, "tape buffer over flow."),
             NegativePosition => write!(f, "tape negative position."),
             CannotDecodeCharacter => write!(f, "can not decode."),
+            CannotReadCharacter => write!(f, "can not read."),
         }
     }
 }
@@ -43,12 +48,13 @@ impl StdError for InterpreterError {
             TapeBufferOverflow => "tape buffer over flow.",
             NegativePosition => "tape negative position.",
             CannotDecodeCharacter => "can not decode.",
+            CannotReadCharacter => "can not read.",
         }
     }
 }
 
 impl InterpreterError {
-    fn show_diagnostic(&self, input: &str) {
+    pub fn show_diagnostic(&self, input: &str) {
         // エラー情報を簡単に表示し
         eprintln!("{}", self);
         // エラー位置を指示する
