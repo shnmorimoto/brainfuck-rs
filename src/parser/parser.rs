@@ -46,10 +46,10 @@ where
                     Ok(Ast::ast_loop(loop_asts, tok.loc))
                 }
                 TokenKind::RParen => {
-                    *stack_num -= 1;
-                    if *stack_num < 0 {
+                    if *stack_num == 0 {
                         Err(ParseError::RedudantClosedParen(tok.clone()))
                     } else {
+                        *stack_num -= 1;
                         Err(ParseError::Eof)
                     }
                 }
