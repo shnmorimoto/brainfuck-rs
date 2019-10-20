@@ -4,16 +4,29 @@ use brainfuck_rs::lexer::lexer::lex;
 use brainfuck_rs::parser::ast::Ast;
 use brainfuck_rs::error::Error;
 use brainfuck_rs::error::show_trace;
+use std::env;
+use std::fs::read_to_string;
+use std::process;
 
 fn main() {
     let mut interp = Interpreter::new(3000);
-    let code: &str = "+++++++++[>++++++++>+++++++++++>+++>+<<<<-]>.>++.+++++++..+++.>+++++.<<+++++++++++++++.>.+++.------.--------.>+.>+."; //hello world
-    let asts = match parse_code(code) {
+
+    let filename = env::args().nth(1).expect("1 argument FILENAME required");
+    let code = match read_to_string(filename) {
+        Ok(code) => code,
+        Err(e) => {
+            println!("Can't open file: {}", e);
+            process::exit(-1);
+        }
+    };
+
+
+    let asts = match parse_code(&code) {
         Ok(asts) => asts,
         Err(e) => {
             e.show_diagnostic(&code);
             show_trace(e);
-            return ()
+            process::exit(-1);
         }
     };
 
@@ -22,8 +35,7 @@ fn main() {
         Err(e) => {
             e.show_diagnostic(&code);
             show_trace(e);
-            return();
-
+            process::exit(-1)
         }
     }
 }
