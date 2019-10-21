@@ -1,7 +1,7 @@
 use crate::common::Loc;
 use crate::lexer::token::Token;
-use std::fmt;
 use std::error::Error as StdError;
+use std::fmt;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum ParseError {

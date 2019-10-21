@@ -1,9 +1,9 @@
-use std::error::Error as StdError;
-use crate::lexer::error::LexError;
-use crate::parser::error::ParseError;
-use crate::common::Loc;
 use crate::common::print_annot;
+use crate::common::Loc;
+use crate::lexer::error::LexError;
 use crate::lexer::token::Token;
+use crate::parser::error::ParseError;
+use std::error::Error as StdError;
 
 use std::fmt;
 
@@ -21,11 +21,11 @@ impl Error {
             Lexer(e) => (e, e.loc.clone()),
             Parser(e) => {
                 let loc = match e {
-                    P::UnexpectedToken(Token {loc, ..})
-                    | P::NotExpression(Token {loc, ..})
+                    P::UnexpectedToken(Token { loc, .. })
+                    | P::NotExpression(Token { loc, .. })
                     | P::UnclosedOpenParen(loc)
-                    | P::RedudantClosedParen(Token {loc, ..}) => loc.clone(),
-                    P::RedudantExpression(Token {loc, ..}) => Loc(loc.0, input.len()),
+                    | P::RedudantClosedParen(Token { loc, .. }) => loc.clone(),
+                    P::RedudantExpression(Token { loc, .. }) => Loc(loc.0, input.len()),
                     P::Eof => Loc(input.len(), input.len() + 1),
                 };
                 (e, loc)

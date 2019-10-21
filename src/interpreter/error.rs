@@ -1,6 +1,6 @@
+use crate::common::print_annot;
 use crate::common::Annot;
 use crate::common::Loc;
-use crate::common::print_annot;
 use std::error::Error as StdError;
 use std::fmt;
 
