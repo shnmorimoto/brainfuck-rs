@@ -12,7 +12,6 @@ pub struct Interpreter {
 }
 
 impl Interpreter {
-
     pub fn new(tape_size: usize) -> Self {
         Interpreter {
             position: 0,
@@ -22,22 +21,26 @@ impl Interpreter {
     }
 
     pub fn eval(&mut self, expr: Vec<Ast>) -> Result<(), InterpreterError> {
-
-        fn _eval(_position: &mut usize,  _tape: &mut Vec<u32>, _size: usize, _expr: &Vec<Ast>) -> Result<(), InterpreterError> {
+        fn _eval(
+            _position: &mut usize,
+            _tape: &mut Vec<u32>,
+            _size: usize,
+            _expr: &Vec<Ast>,
+        ) -> Result<(), InterpreterError> {
             for ast in _expr.into_iter() {
                 match &ast.value {
                     AstKind::Incr => _tape[*_position] += 1,
                     AstKind::Decr => _tape[*_position] -= 1,
-                    AstKind::Next => { 
+                    AstKind::Next => {
                         if *_position + 1 >= _size - 1 {
-                            return Err(InterpreterError::buffer_overflow(ast.loc))
+                            return Err(InterpreterError::buffer_overflow(ast.loc));
                         } else {
                             *_position += 1
                         }
                     }
                     AstKind::Prev => {
                         if *_position == 0 {
-                            return Err(InterpreterError::negative_postion(ast.loc))
+                            return Err(InterpreterError::negative_postion(ast.loc));
                         } else {
                             *_position -= 1
                         }
@@ -46,20 +49,18 @@ impl Interpreter {
                         let decoded_char = std::char::from_u32(_tape[*_position]);
                         match decoded_char {
                             Some(c) => print!("{}", c),
-                            _ => return Err(InterpreterError::cannot_decode_character(ast.loc))
+                            _ => return Err(InterpreterError::cannot_decode_character(ast.loc)),
                         }
                     }
                     AstKind::Read => {
                         let mut buf_in = String::new();
                         match io::stdin().read_line(&mut buf_in) {
                             Ok(_) => (),
-                            Err(_) => return Err(InterpreterError::cannot_read_character(ast.loc))
+                            Err(_) => return Err(InterpreterError::cannot_read_character(ast.loc)),
                         };
                         _tape[*_position] = match buf_in.trim().parse::<u32>() {
                             Ok(num) => num,
-                            Err(_) => {
-                                buf_in.chars().collect::<Vec<char>>()[0] as u32
-                            }
+                            Err(_) => buf_in.chars().collect::<Vec<char>>()[0] as u32,
                         };
                     }
                     AstKind::Loop(inner_ast) => {

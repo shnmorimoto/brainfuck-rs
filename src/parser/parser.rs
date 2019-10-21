@@ -65,19 +65,18 @@ where
 
 #[test]
 fn test_parse() {
-
     let ast = parse(vec![
-            Token::incr(Loc(0, 1)),
-            Token::decr(Loc(1, 2)),
-            Token::next(Loc(2, 3)),
-            Token::prev(Loc(3, 4)),
-            Token::read(Loc(4, 5)),
-            Token::write(Loc(5, 6)),
-            Token::lparen(Loc(6, 7)),
-            Token::incr(Loc(7, 8)),
-            Token::decr(Loc(8, 9)),
-            Token::rparen(Loc(9, 10)),
-            Token::incr(Loc(10, 11)),
+        Token::incr(Loc(0, 1)),
+        Token::decr(Loc(1, 2)),
+        Token::next(Loc(2, 3)),
+        Token::prev(Loc(3, 4)),
+        Token::read(Loc(4, 5)),
+        Token::write(Loc(5, 6)),
+        Token::lparen(Loc(6, 7)),
+        Token::incr(Loc(7, 8)),
+        Token::decr(Loc(8, 9)),
+        Token::rparen(Loc(9, 10)),
+        Token::incr(Loc(10, 11)),
     ]);
     assert_eq!(
         ast,
@@ -88,10 +87,7 @@ fn test_parse() {
             Ast::prev(Loc(3, 4)),
             Ast::read(Loc(4, 5)),
             Ast::write(Loc(5, 6)),
-            Ast::ast_loop(vec![
-                Ast::incr(Loc(7, 8)),
-                Ast::decr(Loc(8, 9)),
-            ], Loc(6,7)),
+            Ast::ast_loop(vec![Ast::incr(Loc(7, 8)), Ast::decr(Loc(8, 9)),], Loc(6, 7)),
             Ast::incr(Loc(10, 11))
         ])
     )
